@@ -13,7 +13,6 @@ function TrueRP_LevelUp:StartCinematicLevelUp(level)
         return
     end
 
-    -- Inspiré d'ElvUI : on masque tous les enfants de UIParent sauf notre interface
     for _, frame in ipairs({ UIParent:GetChildren() }) do
         if frame and frame:IsShown() and frame ~= cinematicFrame then
             frame:Hide()
@@ -23,23 +22,14 @@ function TrueRP_LevelUp:StartCinematicLevelUp(level)
 
     self:BuildCinematicFrame()
 
-    -- Masque toute l'interface standard
-    -- Inspiré d'ElvUI : ne pas cacher UIParent, mais le contenu
-    -- Ceci permet de garder notre frame visible
     if InspectFrame then InspectFrame:Hide() end
-
     if PlayerFrame then PlayerFrame:Hide() end
     if TargetFrame then TargetFrame:Hide() end
     if MinimapCluster then MinimapCluster:Hide() end
     if BuffFrame then BuffFrame:Hide() end
 
-    -- Désactive certains sons d'ambiance (optionnel)
     SetCVar("Sound_EnableAmbience", 0)
 
-    -- Affiche notre cadre personnalisé
-    -- UIParent reste visible
-
-    -- Masque ElvUI (ou autres frames connues) manuellement si présent
     framesToHide = {
         _G["ElvUF_Player"], _G["ElvUF_Target"], _G["ElvUI_Bar1"], _G["ElvUI_Bar2"],
         _G["ElvUI_StanceBar"], _G["ElvUI_PetBar"], _G["ElvUI_Buffs"], _G["ElvUI_Debuffs"]
@@ -51,13 +41,15 @@ function TrueRP_LevelUp:StartCinematicLevelUp(level)
     end
 
     -- Musique héroïque
-    PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\Arbiter_Heroic.ogg")
+    StopMusic()
+    C_Timer.After(0.1, function()
+        PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\arbiters_chamber_revelation_heroic.mp3")
+    end)
 
-    -- Caméra immersive (rotation native lente)
-    -- Réinitialise le zoom avant d'appliquer une distance fixe
+
     -- for i = 1, 50 do CameraZoomOut() end
     -- C_Timer.After(0.1, function()
-    --     CameraZoomIn(10) -- distance prédéfinie (ajuste si besoin)
+    --     CameraZoomIn(10)
     -- end)
     cameraActive = true
     MoveViewRightStart(0.03)
@@ -77,7 +69,7 @@ function TrueRP_LevelUp:StartCinematicLevelUp(level)
         end
     end)
 
-    C_Timer.After(1, function()
+    C_Timer.After(3, function()
         continueButton:Show()
     end)
 end
@@ -100,7 +92,6 @@ function TrueRP_LevelUp:StopCinematicCamera()
 end
 
 function TrueRP_LevelUp:BuildCinematicFrame()
-    -- Création d'un fond transparent comme dans ElvUI
     local blackoutFrame = CreateFrame("Frame", nil, UIParent)
     blackoutFrame:SetAllPoints(UIParent)
     blackoutFrame:SetFrameStrata("FULLSCREEN")
@@ -111,7 +102,7 @@ function TrueRP_LevelUp:BuildCinematicFrame()
     cinematicFrame = CreateFrame("Frame", nil, blackoutFrame)
     cinematicFrame:SetAllPoints(UIParent)
     cinematicFrame:SetFrameStrata("FULLSCREEN_DIALOG")
-    -- Restauration de l'interface standard
+
     if InspectFrame then InspectFrame:Show() end
     if PlayerFrame then PlayerFrame:Show() end
     if TargetFrame then TargetFrame:Show() end
@@ -138,12 +129,11 @@ function TrueRP_LevelUp:BuildCinematicFrame()
     continueButton:SetHeight(60)
     continueButton:SetPoint("TOP", levelText, "BOTTOM", 0, -20)
     continueButton:Hide()
-    -- Effet visuel : halo clignotant léger
     continueButton:SetBackdrop({ bgFile = "Interface\\Buttons\\WHITE8x8" })
     continueButton:SetBackdropBorderColor(1, 1, 0.3, 0.8)
     continueButton:SetBackdropColor(1, 1, 0.3, 0.2)
     continueButton:SetSize(280, 80)
-    continueButton:SetBackdropColor(1, 1, 0.3, 0.2)
+
     local t = 0
     continueButton:SetScript("OnUpdate", function(self, elapsed)
         t = t + elapsed
@@ -161,7 +151,7 @@ function TrueRP_LevelUp:BuildCinematicFrame()
         framesToHide = {}
 
         cinematicFrame:Hide()
-        PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\Arbiter_Ethereal.ogg")
+        PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\arbiters_chamber_revelation_C.mp3")
         TrueRP_LevelUp:BuildTalentUI()
     end)
 end
