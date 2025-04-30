@@ -3,7 +3,6 @@
 TrueRP_LevelUp = TrueRP_LevelUp or {}
 
 local cinematicFrame, levelText, narrativeText, continueButton
-local framesToHide = {}
 local cameraActive = false
 
 function TrueRP_LevelUp:StartCinematicLevelUp(level)
@@ -13,44 +12,15 @@ function TrueRP_LevelUp:StartCinematicLevelUp(level)
         return
     end
 
-    for _, frame in ipairs({ UIParent:GetChildren() }) do
-        if frame and frame:IsShown() and frame ~= cinematicFrame then
-            frame:Hide()
-            table.insert(framesToHide, frame)
-        end
-    end
-
     self:BuildCinematicFrame()
-
-    if InspectFrame then InspectFrame:Hide() end
-    if PlayerFrame then PlayerFrame:Hide() end
-    if TargetFrame then TargetFrame:Hide() end
-    if MinimapCluster then MinimapCluster:Hide() end
-    if BuffFrame then BuffFrame:Hide() end
 
     SetCVar("Sound_EnableAmbience", 0)
 
-    framesToHide = {
-        _G["ElvUF_Player"], _G["ElvUF_Target"], _G["ElvUI_Bar1"], _G["ElvUI_Bar2"],
-        _G["ElvUI_StanceBar"], _G["ElvUI_PetBar"], _G["ElvUI_Buffs"], _G["ElvUI_Debuffs"]
-    }
-    for _, frame in pairs(framesToHide) do
-        if frame and frame:IsVisible() then
-            frame:Hide()
-        end
-    end
-
-    -- Musique héroïque
     StopMusic()
     C_Timer.After(0.1, function()
         PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\arbiters_chamber_revelation_heroic.mp3")
     end)
 
-
-    -- for i = 1, 50 do CameraZoomOut() end
-    -- C_Timer.After(0.1, function()
-    --     CameraZoomIn(10)
-    -- end)
     cameraActive = true
     MoveViewRightStart(0.03)
 
@@ -103,12 +73,6 @@ function TrueRP_LevelUp:BuildCinematicFrame()
     cinematicFrame:SetAllPoints(UIParent)
     cinematicFrame:SetFrameStrata("FULLSCREEN_DIALOG")
 
-    if InspectFrame then InspectFrame:Show() end
-    if PlayerFrame then PlayerFrame:Show() end
-    if TargetFrame then TargetFrame:Show() end
-    if MinimapCluster then MinimapCluster:Show() end
-    if BuffFrame then BuffFrame:Show() end
-
     SetCVar("Sound_EnableAmbience", 1)
     cinematicFrame:Hide()
 
@@ -144,12 +108,6 @@ function TrueRP_LevelUp:BuildCinematicFrame()
     continueButton:SetScript("OnClick", function()
         StopMusic()
         TrueRP_LevelUp:StopCinematicCamera()
-
-        for _, frame in pairs(framesToHide) do
-            if frame then frame:Show() end
-        end
-        framesToHide = {}
-
         cinematicFrame:Hide()
         PlayMusic("Interface\\AddOns\\TrueRP_LevelUp\\Media\\arbiters_chamber_revelation_C.mp3")
         TrueRP_LevelUp:BuildTalentUI()
