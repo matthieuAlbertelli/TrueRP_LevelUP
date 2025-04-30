@@ -102,7 +102,10 @@ function TrueRP_LevelUp:RenderTalentTree()
             local y = -offsetY - (row - 1) * (iconSize + spacingY)
 
             local btn = CreateFrame("Button", nil, container)
+
             btn:SetSize(iconSize, iconSize)
+
+
             btn:SetPoint("TOPLEFT", x, y)
 
             local icon = btn:CreateTexture(nil, "BACKGROUND")
@@ -113,28 +116,39 @@ function TrueRP_LevelUp:RenderTalentTree()
             local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             text:SetFont("Fonts\\FRIZQT__.TTF", 16, "OUTLINE")
 
-            -- Bloc contenant le rang
-            -- Bloc contenant le rang, centré en bas
-            -- Bloc contenant le rang, centré et légèrement en dessous
-            local rankFrame = CreateFrame("Frame", nil, btn, BackdropTemplateMixin and "BackdropTemplate" or nil)
-            rankFrame:SetSize(38, 24)             -- plus large et haut
-            rankFrame:SetPoint("CENTER", btn, "BOTTOM", 0, 0) -- centre vertical aligné au bas du talent
+
+            -- Bloc contenant le rang, centré en bas de l'icône
+            local rankFrame = CreateFrame("Frame", nil, btn)
+            rankFrame:SetSize(38, 24)
+            rankFrame:SetPoint("CENTER", btn, "BOTTOM", 0, 0)
+
+            -- Fond et bordure WoW classiques
             rankFrame:SetBackdrop({
-                bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+                bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
                 edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
                 tile = true,
                 tileSize = 16,
                 edgeSize = 12,
-                insets = { left = 6, right = 6, top = 5, bottom = 5 } -- plus de marge interne
+                insets = { left = 4, right = 4, top = 4, bottom = 4 }
             })
             rankFrame:SetBackdropColor(0, 0, 0, 0.95)
-            rankFrame:SetBackdropBorderColor(0.8, 0.8, 0.8)
+
+            -- Bordure : dorée si max, grise sinon
+            if rank == maxRank and maxRank > 0 then
+                rankFrame:SetBackdropBorderColor(1.0, 0.82, 0.0) -- doré
+            else
+                rankFrame:SetBackdropBorderColor(0.7, 0.7, 0.7)  -- gris standard
+            end
 
             -- Texte du rang
             local text = rankFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            text:SetPoint("CENTER")
             text:SetFont("Fonts\\FRIZQT__.TTF", 18, "OUTLINE")
+            text:SetPoint("CENTER")
             text:SetText(rank .. "/" .. maxRank)
+
+
+
+
 
 
 
