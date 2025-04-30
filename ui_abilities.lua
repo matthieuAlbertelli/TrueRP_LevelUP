@@ -1,0 +1,1 @@
+-- Interface des capacités et gains

@@ -1,0 +1,1 @@
+-- Logique d'attribution des talents

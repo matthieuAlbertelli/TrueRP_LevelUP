@@ -1,0 +1,10 @@
+## Interface: 30300
+## Title: TrueRP_LevelUp
+main.lua
+cinematic.lua
+talents.lua
+arrows.lua
+ui_talents.lua
+ui_abilities.lua
+logic.lua
+templates.xml

@@ -1,0 +1,1 @@
+-- Extraction et gestion des talents
