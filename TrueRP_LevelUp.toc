@@ -1,5 +1,8 @@
 ## Interface: 30300
 ## Title: TrueRP_LevelUp
+AbilitiesFrame.xml
+CinematicFrame.xml
+
 main.lua
 cinematic.lua
 talents.lua

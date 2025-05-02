@@ -1,0 +1,50 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Frame name="TRP_CinematicFrame" parent="UIParent" frameStrata="FULLSCREEN_DIALOG" hidden="true">
+		<Size x="1024" y="768" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="TRP_CinematicFrameNarrativeText" inherits="GameFontNormalHuge" font="Fonts\FRIZQT__.TTF">
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="50" />
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+					<JustifyH value="CENTER" />
+				</FontString>
+				<FontString name="TRP_CinematicFrameLevelText">
+					<Font name="Fonts\FRIZQT__.TTF">
+						<FontHeight val="120" />
+						<Outline />
+					</Font>
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="0" />
+					<JustifyH value="CENTER" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="TRP_CinematicFrameContinueButton" inherits="UIPanelButtonTemplate" hidden="true">
+				<Size x="280" y="80" />
+				<Anchors>
+					<Anchor point="TOP" relativeTo="TRP_CinematicFrameLevelText" relativePoint="BOTTOM" x="0" y="-20" />
+				</Anchors>
+				<NormalFont style="GameFontNormalLarge" />
+				<Text>
+					|cffffff88Montée de niveau|r
+				</Text>
+				<!-- Halo lumineux autour du bouton -->
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="TRP_CinematicFrameButtonGlow" setAllPoints="true">
+							<Color r="1" g="1" b="0.3" a="0.25" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Button>
+		</Frames>
+	</Frame>
+</Ui>

@@ -1,0 +1,36 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Frame name="TrueRP_AbilitiesFrame" parent="UIParent" hidden="true" frameStrata="DIALOG">
+		<Size x="1024" y="768" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBackground" setAllPoints="true" file="Interface\DialogFrame\UI-DialogBox-Background">
+					<Color r="0.05" g="0.05" b="0.05" a="0.9" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentTitle" inherits="GameFontNormalHuge" text="Choisissez vos talents">
+					<Anchors>
+						<Anchor point="TOP" x="0" y="-40" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="$parentTalentGrid">
+				<Size x="800" y="500" />
+				<Anchors>
+					<Anchor point="CENTER" x="0" y="-20" />
+				</Anchors>
+			</Frame>
+			<Button name="$parentNextButton" inherits="UIPanelButtonTemplate" text="Suivant">
+				<Size x="180" y="40" />
+				<Anchors>
+					<Anchor point="BOTTOM" x="0" y="60" />
+				</Anchors>
+			</Button>
+		</Frames>
+	</Frame>
+</Ui>
