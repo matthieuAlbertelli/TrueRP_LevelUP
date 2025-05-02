@@ -93,7 +93,7 @@ function TrueRP_LevelUp:RenderTalentTree()
         local offsetY = (containerHeight - gridHeight) / 2
 
         for i = 1, GetNumTalents(tab) do
-            local name, iconPath, tier, column, rank, maxRank = GetTalentInfo(tab, i)
+            local name, iconPath, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(tab, i)
 
             local row = tier + 1
             local col = column
@@ -102,27 +102,23 @@ function TrueRP_LevelUp:RenderTalentTree()
             local y = -offsetY - (row - 1) * (iconSize + spacingY)
 
             local btn = CreateFrame("Button", nil, container)
-
             btn:SetSize(iconSize, iconSize)
-
-
             btn:SetPoint("TOPLEFT", x, y)
 
             local icon = btn:CreateTexture(nil, "BACKGROUND")
             icon:SetAllPoints()
             icon:SetTexture(iconPath)
+            icon:SetDesaturated(not available)
 
-            -- Affiche le rang actuel
-            local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            text:SetFont("Fonts\\FRIZQT__.TTF", 16, "OUTLINE")
-
+            -- Appliquer un masque rond uniquement aux talents passifs
+            -- if not isExceptional then
+            --     icon:SetMask("Interface\\AddOns\\TrueRP_LevelUp\\media\\mask_round")
+            -- end
 
             -- Bloc contenant le rang, centré en bas de l'icône
             local rankFrame = CreateFrame("Frame", nil, btn)
             rankFrame:SetSize(38, 24)
             rankFrame:SetPoint("CENTER", btn, "BOTTOM", 0, 0)
-
-            -- Fond et bordure WoW classiques
             rankFrame:SetBackdrop({
                 bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
                 edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -135,58 +131,50 @@ function TrueRP_LevelUp:RenderTalentTree()
 
             -- Bordure : dorée si max, grise sinon
             if rank == maxRank and maxRank > 0 then
-                rankFrame:SetBackdropBorderColor(1.0, 0.82, 0.0) -- doré
+                rankFrame:SetBackdropBorderColor(1.0, 0.82, 0.0)
             else
-                rankFrame:SetBackdropBorderColor(0.7, 0.7, 0.7)  -- gris standard
+                rankFrame:SetBackdropBorderColor(0.7, 0.7, 0.7)
             end
 
-            -- Texte du rang
             local text = rankFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             text:SetFont("Fonts\\FRIZQT__.TTF", 18, "OUTLINE")
             text:SetPoint("CENTER")
             text:SetText(rank .. "/" .. maxRank)
-
-
-
-
-
-
-
 
             table.insert(container.talentButtons, btn)
         end
     end
 end
 
-function TrueRP_LevelUp:BuildTalentGrids()
-    local iconSize = 80
-    local spacingX = 48
-    local spacingY = 32
-    local numCols = 4
-    local numRows = 9
+-- function TrueRP_LevelUp:BuildTalentGrids()
+--     local iconSize = 80
+--     local spacingX = 48
+--     local spacingY = 32
+--     local numCols = 4
+--     local numRows = 9
 
-    for _, container in ipairs(self.talentPanels) do
-        local gridWidth = numCols * iconSize + (numCols - 1) * spacingX
-        local gridHeight = numRows * iconSize + (numRows - 1) * spacingY
+--     for _, container in ipairs(self.talentPanels) do
+--         local gridWidth = numCols * iconSize + (numCols - 1) * spacingX
+--         local gridHeight = numRows * iconSize + (numRows - 1) * spacingY
 
-        local containerWidth = container:GetWidth()
-        local containerHeight = container:GetHeight()
-        local offsetX = (containerWidth - gridWidth) / 2
-        local offsetY = (containerHeight - gridHeight) / 2
+--         local containerWidth = container:GetWidth()
+--         local containerHeight = container:GetHeight()
+--         local offsetX = (containerWidth - gridWidth) / 2
+--         local offsetY = (containerHeight - gridHeight) / 2
 
-        for row = 1, numRows do
-            for col = 1, numCols do
-                local btn = CreateFrame("Button", nil, container)
-                btn:SetSize(iconSize, iconSize)
+--         for row = 1, numRows do
+--             for col = 1, numCols do
+--                 local btn = CreateFrame("Button", nil, container)
+--                 btn:SetSize(iconSize, iconSize)
 
-                local x = offsetX + (col - 1) * (iconSize + spacingX)
-                local y = -offsetY - (row - 1) * (iconSize + spacingY)
-                btn:SetPoint("TOPLEFT", x, y)
+--                 local x = offsetX + (col - 1) * (iconSize + spacingX)
+--                 local y = -offsetY - (row - 1) * (iconSize + spacingY)
+--                 btn:SetPoint("TOPLEFT", x, y)
 
-                local icon = btn:CreateTexture(nil, "BACKGROUND")
-                icon:SetAllPoints()
-                icon:SetTexture("Interface\\Icons\\Ability_Warrior_Charge")
-            end
-        end
-    end
-end
+--                 local icon = btn:CreateTexture(nil, "BACKGROUND")
+--                 icon:SetAllPoints()
+--                 icon:SetTexture("Interface\\Icons\\Ability_Warrior_Charge")
+--             end
+--         end
+--     end
+-- end
