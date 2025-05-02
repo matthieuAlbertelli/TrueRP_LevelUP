@@ -63,17 +63,34 @@ function TrueRP_LevelUp:BuildTalentUI()
     -- appel direct ici
 end
 
+local function CountPointsSpentInTab(tab)
+    local total = 0
+    for i = 1, GetNumTalents(tab) do
+        local _, _, _, _, rank = GetTalentInfo(tab, i)
+        total = total + rank
+    end
+    return total
+end
+
 function TrueRP_LevelUp:RenderTalentTree()
     local iconSize = 80
     local spacingX = 48
     local spacingY = 32
     local numCols = 4
 
+    local function CountPointsSpentInTab(tab)
+        local total = 0
+        for i = 1, GetNumTalents(tab) do
+            local _, _, _, _, rank = GetTalentInfo(tab, i)
+            total = total + rank
+        end
+        return total
+    end
+
     for tab = 1, GetNumTalentTabs() do
         local container = self.talentPanels[tab]
         if not container then return end
 
-        -- Supprimer anciens boutons s'il y en a
         if container.talentButtons then
             for _, btn in ipairs(container.talentButtons) do
                 btn:Hide()
@@ -92,8 +109,10 @@ function TrueRP_LevelUp:RenderTalentTree()
         local offsetX = (containerWidth - gridWidth) / 2
         local offsetY = (containerHeight - gridHeight) / 2
 
+        local pointsSpent = CountPointsSpentInTab(tab)
+
         for i = 1, GetNumTalents(tab) do
-            local name, iconPath, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(tab, i)
+            local name, iconPath, tier, column, rank, maxRank, isExceptional = GetTalentInfo(tab, i)
 
             local row = tier + 1
             local col = column
@@ -105,17 +124,11 @@ function TrueRP_LevelUp:RenderTalentTree()
             btn:SetSize(iconSize, iconSize)
             btn:SetPoint("TOPLEFT", x, y)
 
-            local icon = btn:CreateTexture(nil, "BACKGROUND")
+            local icon = btn:CreateTexture(nil, "ARTWORK")
             icon:SetAllPoints()
             icon:SetTexture(iconPath)
-            icon:SetDesaturated(not available)
 
-            -- Appliquer un masque rond uniquement aux talents passifs
-            -- if not isExceptional then
-            --     icon:SetMask("Interface\\AddOns\\TrueRP_LevelUp\\media\\mask_round")
-            -- end
-
-            -- Bloc contenant le rang, centré en bas de l'icône
+            -- Bloc contenant le rang
             local rankFrame = CreateFrame("Frame", nil, btn)
             rankFrame:SetSize(38, 24)
             rankFrame:SetPoint("CENTER", btn, "BOTTOM", 0, 0)
@@ -129,7 +142,6 @@ function TrueRP_LevelUp:RenderTalentTree()
             })
             rankFrame:SetBackdropColor(0, 0, 0, 0.95)
 
-            -- Bordure : dorée si max, grise sinon
             if rank == maxRank and maxRank > 0 then
                 rankFrame:SetBackdropBorderColor(1.0, 0.82, 0.0)
             else
@@ -140,6 +152,32 @@ function TrueRP_LevelUp:RenderTalentTree()
             text:SetFont("Fonts\\FRIZQT__.TTF", 18, "OUTLINE")
             text:SetPoint("CENTER")
             text:SetText(rank .. "/" .. maxRank)
+
+            -- Déterminer si talent disponible
+            local isAvailable = false
+            if rank < maxRank then
+                if tier == 1 then
+                    isAvailable = true
+                elseif pointsSpent >= (tier - 1) * 5 then
+                    isAvailable = true
+                end
+            end
+
+            -- Effets visuels : vert / gris
+            if rank < maxRank then
+                if isAvailable then
+                    local green = btn:CreateTexture(nil, "OVERLAY")
+                    green:SetAllPoints()
+                    green:SetTexture(0.2, 0.8, 0.2, 0.3)
+                    text:SetTextColor(0.2, 1.0, 0.2) -- texte en vert
+                else
+                    local gray = btn:CreateTexture(nil, "OVERLAY")
+                    gray:SetAllPoints()
+                    gray:SetTexture(0.3, 0.3, 0.3, 0.5)
+                    text:SetTextColor(0.5, 0.5, 0.5) -- texte grisé
+                end
+            end
+
 
             table.insert(container.talentButtons, btn)
         end
